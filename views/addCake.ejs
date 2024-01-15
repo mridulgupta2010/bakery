@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="stylesheets/admin/addCake.css">
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous">
+    </head>
+    <body>
+
+        <div class="formbold-main-wrapper">
+            <div class="formbold-form-wrapper">
+                <form action="/addCake" method="POST" enctype="multipart/form-data">
+                    <div class="formbold-input-flex">
+                        <div>
+                            <input
+                                required="required"
+                                type="text"
+                                name="cName"
+                                id="cName"
+                                placeholder="Strawberry shortcake"
+                                class="formbold-form-input"/>
+                            <label for="firstname" class="formbold-form-label">
+                                Cake's Name
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="formbold-input-flex">
+                        <div>
+                            <input
+                                required="required"
+                                type="number"
+                                id="cPrice"
+                                name="cPrice"
+                                min="0"
+                                step="0.01"
+                                pattern="\d+(\.\d{1,2})?"
+                                placeholder="Enter a valid price (e.g., 10.99)"
+                                class="formbold-form-input"/>
+                            <label for="email" class="formbold-form-label">
+                                Set Price
+                            </label>
+                        </div>
+                        <div>
+                            <input
+                                required="required"
+                                type="number"
+                                name="cDiscount"
+                                id="cDiscount"
+                                placeholder="Enter percentage"
+                                class="formbold-form-input"/>
+                            <label for="phone" class="formbold-form-label">
+                                Set discount
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="formbold-textarea">
+                        <textarea
+                            required="required"
+                            rows="3"
+                            name="cDescription"
+                            id="cDescription"
+                            placeholder="Write your cake's short description..."
+                            class="formbold-form-input"></textarea>
+                        <label for="message" class="formbold-form-label">
+                            Description
+                        </label>
+                    </div>
+
+                    <div class="formbold-input-file">
+                        <div class="formbold-filename-wrapper">
+                            <span class="formbold-filename" id="filename">No file selected</span>
+                            <button
+                                type="button"
+                                id="removeButton"
+                                style="display: none;"
+                                class="formbold-btn"
+                                onclick="removeFile()">Remove</button>
+                        </div>
+                        <label id="attachImageLabel" for="upload" class="formbold-input-label">
+                            <!-- ... your existing SVG code ... -->
+                            Attach Image
+                            <input
+                                required="required"
+                                type="file"
+                                name="upload"
+                                id="upload"
+                                onchange="updateFileName()">
+                        </label>
+                    </div>
+
+                    <button type="submit" class="formbold-btn">
+                        Add Cake
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <% if(locals.cakeData){ %>
+            <% if (cakeData && cakeData.length > 0) { %>
+                <section id="editor">
+                    <div class="main">
+                        <h1>Potter's Menu</h1>
+                        <ul class="cards">
+                            <% cakeData.forEach(cake => { %>
+                                <% if (cake.img && cake.img.data) { %>
+                                    
+                                    <li class="cards_item">
+                                        
+                                        <div class="card">
+                                            <div class="card_image"><img
+                                                src="data:<%= cake.img.contentType %>;base64,<%= cake.img.data.toString('base64') %>"></div>
+                                                <form action="/updateCake" method="POST">
+                                                
+                                                <div class="card_content">
+                                                
+                                                <input type="hidden" name="productCode" value="<%= cake.productCode %>">
+                                                <p>Product Code: <%= cake.productCode %></p>
+                                                <br>
+                                                <div class="formbold-input-flex">
+                                                    <input
+                                
+                                                        type="text"
+                                                        name="productName"
+                                                        id="cName"
+                                                        placeholder="<%= cake.productName%>"
+                                                        class="formbold-form-input"/>
+                                                    <label for="firstname" class="formbold-form-label">
+                                                        Cake's Name
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="formbold-textarea">
+                                                <textarea
+                                                    
+                                                    rows="3"
+                                                    name="productDescription"
+                                                    id="prooductDescription"
+                                                    placeholder="<%= cake.productDescription%>"
+                                                    class="formbold-form-input"></textarea>
+                                                <label for="message" class="formbold-form-label">
+                                                    Description
+                                                </label>
+                                            </div>
+                                            <div class="formbold-input-flex">
+                                                <div>
+                                                    <input
+                                                        
+                                                        type="number"
+                                                        id="cPrice"
+                                                        name="productPrice"
+                                                        min="0"
+                                                        step="0.01"
+                                                        pattern="\d+(\.\d{1,2})?"
+                                                        placeholder="<%= cake.productPrice%>"
+                                                        class="formbold-form-input"/>
+                                                    <label for="email" class="formbold-form-label">
+                                                        Set Price
+                                                    </label>
+                                                </div>
+
+                                                <div>
+                                                    <input
+                                                        
+                                                        type="number"
+                                                        name="productDiscount"
+                                                        id="cDiscount"
+                                                        placeholder="<%= cake.productDiscount%>"
+                                                        class="formbold-form-input"/>
+                                                    <label for="phone" class="formbold-form-label">
+                                                        Set discount
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="formbold-input-flex">
+                                                <div>
+                                                    <button type="submit" class="formbold-form-input btn btn-success">Update</button>
+                                                </div>
+                                                <div>
+                                                    <button type="submit" formaction="/deleteCake" class="formbold-form-input btn btn-danger">Delete</button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                        </div>
+                                    
+                                    </li>
+                                
+                            <% } else { %>
+                                <p>No image available for this cake.</p>
+                            <% } %>
+                            <% }); %>
+                            <% } else { %>
+                                <p>No cakes available.</p>
+                            <% } %>
+                        <% } %>
+                    </ul>
+                </div>
+            </section>
+
+            <script>
+                // Function to update file name and check file format
+                function updateFileName() {
+                    const uploadInput = document.getElementById('upload');
+                    const filenameSpan = document.getElementById('filename');
+                    const removeButton = document.getElementById('removeButton');
+                    const attachImageLabel = document.getElementById('attachImageLabel');
+
+                    if (uploadInput.files.length !== 1) {
+                        alert('Please select only one image.');
+                        uploadInput.value = ''; // Clear the file input
+                        filenameSpan.textContent = 'No file selected';
+                        removeButton.style.display = 'none'; // Hide the remove button
+                        attachImageLabel.style.display = 'inline-block'; // Show the "Attach Image" label
+                        return;
+                    }
+
+                    const filename = uploadInput
+                        .files[0]
+                        .name;
+                    const fileExtension = filename
+                        .split('.')
+                        .pop()
+                        .toLowerCase();
+
+                    // Check if the file is in PNG format
+                    if (fileExtension !== 'png') {
+                        alert('Please select a PNG file.');
+                        uploadInput.value = ''; // Clear the file input
+                        filenameSpan.textContent = 'No file selected';
+                        removeButton.style.display = 'none'; // Hide the remove button
+                        attachImageLabel.style.display = 'inline-block'; // Show the "Attach Image" label
+                        return;
+                    }
+
+                    filenameSpan.textContent = filename;
+                    removeButton.style.display = 'inline-block'; // Show the remove button
+                    attachImageLabel.style.display = 'none'; // Hide the "Attach Image" label
+                }
+
+                // Function to remove the file
+                function removeFile() {
+                    const uploadInput = document.getElementById('upload');
+                    const filenameSpan = document.getElementById('filename');
+                    const removeButton = document.getElementById('removeButton');
+                    const attachImageLabel = document.getElementById('attachImageLabel');
+
+                    uploadInput.value = ''; // Clear the file input
+                    filenameSpan.textContent = 'No file selected';
+                    removeButton.style.display = 'none'; // Hide the remove button
+                    attachImageLabel.style.display = 'inline-block'; // Show the "Attach Image" label
+                }
+            </script>
+
+            <style>
+                /* Your existing CSS styles */
+            </style>
+
+        </body>
+    </html>

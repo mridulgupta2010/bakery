@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            overflow-y: hidden;
+            overflow-x: hidden;
+            background-color: #034a94;
+        }
+        .wrapper {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+            transform: rotateX(-20deg) rotateZ(0deg);
+            
+        }
+
+        .block {
+            background-color: antiquewhite;
+            width: 10vw;
+            height: 5vw;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .block:hover {
+            transform: translateX(-50px);
+        }
+
+        .block:not(:hover) {
+            transform: translateX(0);
+        }
+
+        .block2 {
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .block2:hover {
+            transform: translateX(50px);
+        }
+
+        .block2:not(:hover) {
+            transform: translateX(0);
+        }
+
+        .outer-wrapper {
+            position: absolute;
+            top: 0px;
+            z-index: 2;
+            width: 100vw;
+            height: 100vh;
+        }
+        .outer-wrapper img {
+            height: 100%;
+            width: 100vw;
+        }
+
+        .project-display{
+            width: 30vw;
+            height: 40vw;
+            background-color: aliceblue;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div class="outer-wrapper">
+        <img src="../public/images/projects/Old Swing Catalogue.pdf (3).png" alt="">
+    </div> -->
+    <div class="wrapper" id="wrapper">
+        <div class="project-display">
+
+        </div>
+    </div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js'></script>
+    <script>
+        let rotation = []
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Define the initial transform values
+            const initialTransforms = [
+                { rotateY: 0 },
+                { rotateY: 9 },
+                { rotateY: 18 },
+                { rotateY: 27 },
+                { rotateY: 36 },
+                { rotateY: 45 },
+                { rotateY: 54 },
+                { rotateY: 63 },
+                { rotateY: 72 },
+                { rotateY: 81 },
+                { rotateY: 90 },
+                { rotateY: 99 },
+                { rotateY: 108 },
+                { rotateY: 117 },
+                { rotateY: 126 },
+                { rotateY: 135 },
+                { rotateY: 144 },
+                { rotateY: 153 },
+                { rotateY: 162 },
+                { rotateY: 171 },
+                { rotateY: 180 },
+            ];
+
+            // Get the wrapper element Create and append .inner elements dynamically
+            for (let i = 0; i < initialTransforms.length; i++) {
+                const inner = document.createElement('div');
+                inner.className = 'inner';
+                inner.style.width = '80vw';
+                inner.style.height = '30px';
+                inner.style.position = 'absolute';
+                inner.style.display = 'flex';
+                inner.style.justifyContent = 'space-between';
+                // inner.style.animation = `rotateAround${i} 10s linear infinite forwards`;
+                // Create and append .block elements to .inner
+                for (let j = 0; j < 2; j++) {
+                    const block = document.createElement('div');
+                    block.className = j % 2 === 1
+                        ? 'block block2'
+                        : 'block';
+                    inner.appendChild(block);
+                    const image = document.createElement('img');
+                    image.src = j % 2 === 1
+                        ? '../public/images/projects/P1.png'
+                        : '../public/images/projects/P2.png';
+                    image.style.height = "100%";
+                    image.style.width = "100%";
+                    block.appendChild(image)
+                }
+
+                // Set the initial transform values
+                inner.style.transform = `rotateY(${initialTransforms[i].rotateY}deg)`;
+
+                // Add the .inner element to the wrapper
+                wrapper.appendChild(inner);
+
+                // Define keyframes for each animation
+                const keyframes = `@keyframes rotateAround${i} {
+                    0% {
+                        transform: rotateY(${initialTransforms[i].rotateY}deg);
+                    }
+                    25% {
+                        transform: rotateY(${ 90 +
+                    initialTransforms[i].rotateY}deg);
+                    }
+                    50% {
+                        transform: rotateY(${ 180 +
+                    initialTransforms[i].rotateY}deg);
+                    }
+                    75% {
+                        transform: rotateY(${ 270 +
+                    initialTransforms[i].rotateY}deg);
+                    }
+                    100% {
+                        transform: rotateY(${ 360 +
+                    initialTransforms[i].rotateY}deg);
+                    }
+                }`;
+
+                // Create and append style tag with keyframes
+                const style = document.createElement('style');
+                style.innerHTML = keyframes;
+                document
+                    .head
+                    .appendChild(style);
+
+                rotation[i] = initialTransforms[i].rotateY;
+
+            }
+
+            window.addEventListener('wheel', function (e) {
+                // Get the wheel delta
+                let delta = e.deltaY;
+                // Calculate the rotation percentage
+                let rotationPercentage = delta / window.innerHeight;
+                // Update the rotation
+                for (let i = 0; i < initialTransforms.length; i++) {
+                    var elements = document.querySelectorAll('.inner');
+                    console.log(elements[i])
+                    rotation[i] += rotationPercentage * 36;
+                    const rot = rotation[i]
+
+                    // Use GSAP to smoothly animate the rotation
+                    TweenMax.to(elements[i], 0.5, { rotationY: rot, ease: Power1.easeInOut });
+                }
+            });
+        });
+
+    </script>
+</body>
+
+</html>
